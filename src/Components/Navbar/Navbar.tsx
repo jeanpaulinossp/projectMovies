@@ -8,7 +8,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-blue-900 p-4">
+    <nav className="bg-blue-900 p-4 h-1/6">
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <div className="text-white text-2xl font-bold mr-4">Logo</div>
