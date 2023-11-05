@@ -1,9 +1,14 @@
 import { MantineProvider } from "@mantine/core";
 import { CardMovie } from "../Card/CardMovie";
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 interface RenderCardsProps {
-  movies: Array<{ poster_path: string; title: string; overview: string }>; // Adicione as propriedades reais do filme aqui
+  movies: Array<{
+    poster_path: string;
+    title: string;
+    overview: string;
+    id: number;
+  }>; // Adicione as propriedades reais do filme aqui
   loading: boolean;
   fetchApi: () => void;
   page: number;
@@ -15,20 +20,20 @@ const RenderCards: React.FC<RenderCardsProps> = ({
   fetchApi,
   page,
 }) => {
-  let scrollTimeout: NodeJS.Timeout | number | undefined;
+  const scrollTimeout = useRef<NodeJS.Timeout | number | undefined>();
 
-  const handleScroll = () => {
-    if (scrollTimeout) {
-      clearTimeout(scrollTimeout);
+  const handleScroll = useCallback(() => {
+    if (scrollTimeout.current) {
+      clearTimeout(scrollTimeout.current as NodeJS.Timeout);
     }
-    scrollTimeout = setTimeout(() => {
+    scrollTimeout.current = setTimeout(() => {
       const { scrollTop, scrollHeight, clientHeight } =
         document.documentElement;
       if (scrollHeight - scrollTop <= clientHeight + 200) {
         fetchApi();
       }
     }, 300);
-  };
+  }, [scrollTimeout, fetchApi]);
 
   useEffect(() => {
     if (page > 1) {
@@ -37,7 +42,7 @@ const RenderCards: React.FC<RenderCardsProps> = ({
         window.removeEventListener("scroll", handleScroll);
       };
     }
-  }, [page]);
+  }, [page, handleScroll]);
 
   return (
     <>
@@ -50,6 +55,7 @@ const RenderCards: React.FC<RenderCardsProps> = ({
                 image={`https://image.tmdb.org/t/p/w500/${item.poster_path}`}
                 title={item.title}
                 description={item.overview}
+                id={item.id}
               />
             ))}
         </MantineProvider>

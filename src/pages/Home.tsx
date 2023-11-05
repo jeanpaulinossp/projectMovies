@@ -2,8 +2,14 @@ import RenderCards from "../Components/RenderCards/RenderCards";
 import { useCallback, useEffect, useState } from "react";
 import { getDataMovies } from "../config/api";
 
+interface Movie {
+  title: string;
+  overview: string;
+  poster_path: string;
+}
+
 const Home = () => {
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
 
@@ -30,6 +36,7 @@ const Home = () => {
 
   useEffect(() => {
     fetchNextMovies();
+    // eslint-disable-next-line
   }, []);
 
   return (

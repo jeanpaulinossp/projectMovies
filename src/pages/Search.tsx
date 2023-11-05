@@ -24,14 +24,15 @@ const Search = () => {
     setLoading(true);
 
     try {
-      const data = await getSearchMovies(searchQuery, page);
-      console.log(data);
-      if (page === 1) {
-        setMovies(data.results);
-        setPage((prevPage) => prevPage + 1);
-      } else {
-        setMovies((prevMovies) => [...prevMovies, ...data.results]);
-        setPage((prevPage) => prevPage + 1);
+      if (searchQuery) {
+        const data = await getSearchMovies(searchQuery, page);
+        if (page === 1) {
+          setMovies(data.results);
+          setPage((prevPage) => prevPage + 1);
+        } else {
+          setMovies((prevMovies) => [...prevMovies, ...data.results]);
+          setPage((prevPage) => prevPage + 1);
+        }
       }
     } catch (error) {
       console.error("Erro ao obter dados dos filmes:", error);
@@ -41,7 +42,8 @@ const Search = () => {
 
   useEffect(() => {
     fetchNextMovies();
-  }, [fetchNextMovies]);
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <RenderCards
