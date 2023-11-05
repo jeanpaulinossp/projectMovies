@@ -1,36 +1,21 @@
 import { MantineProvider } from "@mantine/core";
-import { CardMovie } from "../Components/Card/CardMovie";
-import { useState, useEffect, useCallback } from "react";
-import { getDataMovies } from "../config/api";
+import { CardMovie } from "../Card/CardMovie";
+import { useEffect } from "react";
 
-const Cards = () => {
-  const [movies, setMovies] = useState([]);
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
+interface RenderCardsProps {
+  movies: Array<{ poster_path: string; title: string; overview: string }>; // Adicione as propriedades reais do filme aqui
+  loading: boolean;
+  fetchApi: () => void;
+  page: number;
+}
 
-  let scrollTimeout;
-
-  const fetchNextMovies = useCallback(async () => {
-    if (loading) {
-      console.log("entrei aqui");
-      return;
-    }
-    setLoading(true);
-
-    try {
-      const data = await getDataMovies(page);
-      if (page === 1) {
-        setMovies(data.results);
-        setPage((prevPage) => prevPage + 1);
-      } else {
-        setMovies((prevMovies) => [...prevMovies, ...data.results]);
-        setPage((prevPage) => prevPage + 1);
-      }
-    } catch (error) {
-      console.error("Erro ao obter dados dos filmes:", error);
-    }
-    setLoading(false);
-  }, [loading, page]);
+const RenderCards: React.FC<RenderCardsProps> = ({
+  movies,
+  loading,
+  fetchApi,
+  page,
+}) => {
+  let scrollTimeout: NodeJS.Timeout | number | undefined;
 
   const handleScroll = () => {
     if (scrollTimeout) {
@@ -40,7 +25,7 @@ const Cards = () => {
       const { scrollTop, scrollHeight, clientHeight } =
         document.documentElement;
       if (scrollHeight - scrollTop <= clientHeight + 200) {
-        fetchNextMovies();
+        fetchApi();
       }
     }, 300);
   };
@@ -53,10 +38,6 @@ const Cards = () => {
       };
     }
   }, [page]);
-
-  useEffect(() => {
-    fetchNextMovies();
-  }, []);
 
   return (
     <>
@@ -90,4 +71,4 @@ const Cards = () => {
   );
 };
 
-export default Cards;
+export default RenderCards;

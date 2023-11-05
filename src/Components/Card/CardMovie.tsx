@@ -1,9 +1,17 @@
 import { Card, Image, Text, Group, Button } from "@mantine/core";
 
-export function CardMovie({ image, title, description }) {
-  const words = description.split(" ");
+interface CardMovieProps {
+  image: string;
+  title: string;
+  description: string;
+}
+
+export function CardMovie({ image, title, description }: CardMovieProps) {
+  const words = description && description.split(" ");
   const limitedDescription =
-    words.length > 10 ? words.slice(0, 30).join(" ") + "..." : description;
+    words && words.length > 10
+      ? words.slice(0, 30).join(" ") + "..."
+      : description;
   const imageStyle = {
     height: "250px",
     width: "100%",

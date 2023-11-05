@@ -13,18 +13,38 @@ const api = axios.create({
 
 export const getDataMovies = async (page) => {
   try {
-    const response = await api.get(`/movie/popular?language=en-US&page=1`, {
-      params: {
-        language: "pt-BR",
-        page: page,
-      },
-    });
-
+    const response = await api.get(
+      `/movie/popular?language=en-US&page=${page}`,
+      {
+        params: {
+          language: "pt-BR",
+          page: page,
+        },
+      }
+    );
     const data = response.data;
-
     return data;
   } catch (error) {
     console.error("Erro ao obter dados dos filmes:", error);
     throw error;
+  }
+};
+
+export const getSearchMovies = async (genreId, page) => {
+  try {
+    const response = await api.get(`/search/movie`, {
+      params: {
+        query: genreId,
+        include_adult: false,
+        language: "pt-BR",
+        sort_by: "release_date.asc",
+        page: page,
+      },
+    });
+    const data = response.data;
+    return data;
+  } catch (err) {
+    console.error("Erro ao obter dados dos filmes:", err);
+    throw err;
   }
 };

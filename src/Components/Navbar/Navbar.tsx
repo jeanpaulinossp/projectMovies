@@ -1,17 +1,23 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
+  };
+
+  const handleSearch = () => {
+    // Redireciona para a página de pesquisa
+    window.location.href = `/search?query=${searchQuery}`;
   };
 
   return (
     <nav className="bg-blue-900 p-4 h-1/6">
       <div className="flex justify-between items-center">
         <div className="flex items-center">
-          <div className="text-white text-2xl font-bold mr-4">Logo</div>
           <button className="text-white md:hidden" onClick={toggleMenu}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -41,18 +47,21 @@ const Navbar: React.FC = () => {
         <div
           className={`${menuOpen ? "block" : "hidden"} md:flex md:items-center`}
         >
-          <a
-            href="#"
+          <Link
+            to="/"
             className="text-white hover:text-gray-300 py-2 px-4 md:px-2"
           >
             Home
-          </a>
-          <a
-            href="#"
-            className="text-white hover:text-gray-300 py-2 px-4 md:px-2"
-          >
-            Filmes
-          </a>
+          </Link>
+          <div className="text-black">
+            <input
+              type="text"
+              placeholder="Pesquisar filmes..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <button onClick={handleSearch}>Pesquisar</button>
+          </div>
         </div>
       </div>
     </nav>
