@@ -1,6 +1,7 @@
 import { MantineProvider } from "@mantine/core";
 import { CardMovie } from "../Card/CardMovie";
 import { useCallback, useEffect, useRef } from "react";
+import noImage from "../../assets/noimagem.png";
 
 interface RenderCardsProps {
   movies: Array<{
@@ -8,7 +9,7 @@ interface RenderCardsProps {
     title: string;
     overview: string;
     id: number;
-  }>; // Adicione as propriedades reais do filme aqui
+  }>;
   loading: boolean;
   fetchApi: () => void;
   page: number;
@@ -52,7 +53,11 @@ const RenderCards: React.FC<RenderCardsProps> = ({
             movies.map((item, index) => (
               <CardMovie
                 key={index}
-                image={`https://image.tmdb.org/t/p/w500/${item.poster_path}`}
+                image={
+                  item.poster_path === null || item.poster_path === undefined
+                    ? noImage
+                    : `https://image.tmdb.org/t/p/w500/${item.poster_path}`
+                }
                 title={item.title}
                 description={item.overview}
                 id={item.id}

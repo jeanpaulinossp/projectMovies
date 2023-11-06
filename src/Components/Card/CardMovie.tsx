@@ -3,6 +3,8 @@ import { useState } from "react";
 import MovieModal from "../Modal/MovieModal";
 import iconClosed from "../../assets/icon-closed.svg";
 import { MovieDetails, getMovieDetails } from "../../config/api";
+import noPerfil from "../../assets/noperfil.png";
+import noImage from "../../assets/noimagem.png";
 
 interface CardMovieProps {
   image: string;
@@ -15,6 +17,7 @@ export function CardMovie({ image, title, description, id }: CardMovieProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [renderMovieDetails, setRenderMovieDetails] =
     useState<MovieDetails | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const words = description && description.split(" ");
   const limitedDescription =
@@ -28,11 +31,14 @@ export function CardMovie({ image, title, description, id }: CardMovieProps) {
 
   const openModal = async () => {
     setIsModalOpen(true);
+    setIsLoading(true);
     try {
       const details = await getMovieDetails(id);
       setRenderMovieDetails(details);
     } catch (err) {
       console.error("Erro ao buscar detalhes do filme:", err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -87,49 +93,69 @@ export function CardMovie({ image, title, description, id }: CardMovieProps) {
                 </button>
               </header>
 
-              <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex items-center justify-center">
-                  <img
-                    src={`https://image.tmdb.org/t/p/w500${renderMovieDetails?.poster_path}`}
-                    alt={renderMovieDetails?.title}
-                    className="h-72 w-4/5 rounded-lg"
-                  />
+              {isLoading ? (
+                <div className="text-center h-72 w-full rounded-lg flex items-center justify-center">
+                  <p>Carregando...</p>
                 </div>
+              ) : (
+                <>
+                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center justify-center">
+                      <img
+                        src={
+                          renderMovieDetails?.poster_path !== null &&
+                          renderMovieDetails?.poster_path !== undefined
+                            ? `https://image.tmdb.org/t/p/w500${renderMovieDetails?.poster_path}`
+                            : noImage
+                        }
+                        alt={renderMovieDetails?.title}
+                        className="h-72 w-4/5 rounded-lg"
+                      />
+                    </div>
 
-                <div>
-                  <div className="mb-4">
-                    <span className="text-lg font-semibold">Diretor(a):</span>{" "}
-                    {renderMovieDetails?.director}
-                  </div>
-                  <div className="mb-4">
-                    <span className="text-lg font-semibold">Duração:</span>{" "}
-                    {renderMovieDetails?.runtime} minutos
-                  </div>
-                  <div className="mb-4">
-                    <span className="text-lg font-semibold">Sinopse:</span>{" "}
-                    {renderMovieDetails?.overview}
-                  </div>
-                </div>
-              </div>
-
-              {renderMovieDetails?.cast && (
-                <div className="mt-4">
-                  <h3 className="text-2xl font-bold mb-4">Elenco:</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                    {renderMovieDetails.cast.map((actor, index) => (
-                      <div className="text-center" key={index}>
-                        <img
-                          src={`https://image.tmdb.org/t/p/w185${actor.profile_path}`}
-                          alt={actor.name}
-                          className="w-20 h-20 object-cover rounded-full mx-auto mb-2"
-                        />
+                    <div>
+                      <div className="mb-4">
                         <span className="text-lg font-semibold">
-                          {actor.name}
-                        </span>
+                          Diretor(a):
+                        </span>{" "}
+                        {renderMovieDetails?.director}
                       </div>
-                    ))}
+                      <div className="mb-4">
+                        <span className="text-lg font-semibold">Duração:</span>{" "}
+                        {renderMovieDetails?.runtime} minutos
+                      </div>
+                      <div className="mb-4">
+                        <span className="text-lg font-semibold">Sinopse:</span>{" "}
+                        {renderMovieDetails?.overview}
+                      </div>
+                    </div>
                   </div>
-                </div>
+
+                  {renderMovieDetails?.cast && (
+                    <div className="mt-4">
+                      <h3 className="text-2xl font-bold mb-4">Elenco:</h3>
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                        {renderMovieDetails.cast.map((actor, index) => (
+                          <div className="text-center" key={index}>
+                            <img
+                              src={
+                                actor.profile_path === null ||
+                                actor.profile_path === undefined
+                                  ? noPerfil
+                                  : `https://image.tmdb.org/t/p/w185${actor.profile_path}`
+                              }
+                              alt={actor.name}
+                              className="w-20 h-20 object-cover rounded-full mx-auto mb-2"
+                            />
+                            <span className="text-lg font-semibold">
+                              {actor.name}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </>
