@@ -43,15 +43,12 @@ export interface MovieDetails {
 
 export const getDataMovies = async (page: number): Promise<ApiResponse> => {
   try {
-    const response = await api.get(
-      `/movie/popular?language=en-US&page=${page}`,
-      {
-        params: {
-          language: "pt-BR",
-          page: page,
-        },
-      }
-    );
+    const response = await api.get(`/movie/popular?language=en-US&page=${page}`, {
+      params: {
+        language: "pt-BR",
+        page: page,
+      },
+    });
     const data = response.data;
     return data;
   } catch (error) {
@@ -60,10 +57,7 @@ export const getDataMovies = async (page: number): Promise<ApiResponse> => {
   }
 };
 
-export const getSearchMovies = async (
-  genreId: string,
-  page: number
-): Promise<ApiResponse> => {
+export const getSearchMovies = async (genreId: string, page: number): Promise<ApiResponse> => {
   try {
     const response = await api.get(`/search/movie`, {
       params: {
@@ -82,9 +76,7 @@ export const getSearchMovies = async (
   }
 };
 
-export const getMovieDetails = async (
-  movieId: number
-): Promise<MovieDetails> => {
+export const getMovieDetails = async (movieId: number): Promise<MovieDetails> => {
   try {
     const response = await api.get(`/movie/${movieId}?language=pt-BR`);
     const basicMovieData = response.data;
@@ -107,8 +99,6 @@ export const getMovieDetails = async (
       cast: cast,
       crew: creditsData.crew,
     };
-
-    console.log(movieDetails);
 
     return movieDetails;
   } catch (error) {

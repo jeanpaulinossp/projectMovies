@@ -15,15 +15,12 @@ interface CardMovieProps {
 
 export function CardMovie({ image, title, description, id }: CardMovieProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [renderMovieDetails, setRenderMovieDetails] =
-    useState<MovieDetails | null>(null);
+  const [renderMovieDetails, setRenderMovieDetails] = useState<MovieDetails | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const words = description && description.split(" ");
   const limitedDescription =
-    words && words.length > 10
-      ? words.slice(0, 30).join(" ") + "..."
-      : description;
+    words && words.length > 10 ? words.slice(0, 30).join(" ") + "..." : description;
   const imageStyle = {
     height: "225px",
     width: "100%",
@@ -47,20 +44,13 @@ export function CardMovie({ image, title, description, id }: CardMovieProps) {
   };
 
   return (
-    <Card
-      withBorder
-      radius="md"
-      p="md"
-      className="grid w-64 bg-blue-900 p-4 mt-2 ml-2 rounded-sm"
-    >
+    <Card withBorder radius="md" p="md" className="grid w-64 bg-blue-900 p-4 mt-2 ml-2 rounded-sm">
       <Card.Section>
         <Image src={image} alt={title} style={imageStyle} />
       </Card.Section>
 
       <Card.Section className=" p-4 grid h-52">
-        <Text className="text-lg font-semibold text-white text-center ">
-          {title}
-        </Text>
+        <Text className="text-lg font-semibold text-white text-center ">{title}</Text>
 
         <Text className="text-sm mt-2 text-gray-400 self-center text-center">
           {limitedDescription}
@@ -68,11 +58,7 @@ export function CardMovie({ image, title, description, id }: CardMovieProps) {
       </Card.Section>
 
       <Group className="flex mt-3 border-t self-end justify-center items-center">
-        <Button
-          radius="md"
-          className="p-2 bg-white rounded-sm mb-2 ml-2 mt-2 w-40"
-          onClick={openModal}
-        >
+        <Button radius="md" className="p-2 bg-white rounded-sm mb-2 mt-2 w-40" onClick={openModal}>
           Mais informações
         </Button>
       </Group>
@@ -82,13 +68,8 @@ export function CardMovie({ image, title, description, id }: CardMovieProps) {
           <>
             <div className="bg-white rounded-lg p-4">
               <header className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold">
-                  {renderMovieDetails?.title}
-                </h2>
-                <button
-                  onClick={closeModal}
-                  className="text-gray-500 hover:text-gray-700"
-                >
+                <h2 className="text-2xl font-bold">{renderMovieDetails?.title}</h2>
+                <button onClick={closeModal} className="text-gray-500 hover:text-gray-700">
                   <img src={iconClosed} alt="Fechar" />
                 </button>
               </header>
@@ -115,9 +96,7 @@ export function CardMovie({ image, title, description, id }: CardMovieProps) {
 
                     <div>
                       <div className="mb-4">
-                        <span className="text-lg font-semibold">
-                          Diretor(a):
-                        </span>{" "}
+                        <span className="text-lg font-semibold">Diretor(a):</span>{" "}
                         {renderMovieDetails?.director}
                       </div>
                       <div className="mb-4">
@@ -139,17 +118,14 @@ export function CardMovie({ image, title, description, id }: CardMovieProps) {
                           <div className="text-center" key={index}>
                             <img
                               src={
-                                actor.profile_path === null ||
-                                actor.profile_path === undefined
+                                actor.profile_path === null || actor.profile_path === undefined
                                   ? noPerfil
                                   : `https://image.tmdb.org/t/p/w185${actor.profile_path}`
                               }
                               alt={actor.name}
                               className="w-20 h-20 object-cover rounded-full mx-auto mb-2"
                             />
-                            <span className="text-lg font-semibold">
-                              {actor.name}
-                            </span>
+                            <span className="text-lg font-semibold">{actor.name}</span>
                           </div>
                         ))}
                       </div>

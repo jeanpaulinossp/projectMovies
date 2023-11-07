@@ -1,0 +1,5 @@
+.movieCard {
+  float: left;
+  overflow: hidden;
+  display: flex;
+}

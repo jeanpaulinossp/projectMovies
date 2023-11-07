@@ -12,7 +12,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-blue-900 h-14 flex items-center justify-between">
+    <nav className="bg-blue-900 h-14 flex items-center justify-between fixed top-0 w-full z-50">
       <Link
         to="/"
         className="text-white hover:text-gray-300 py-2 px-4 md:px-2 font-bold text-xl ml-2 sm:ml-28"
