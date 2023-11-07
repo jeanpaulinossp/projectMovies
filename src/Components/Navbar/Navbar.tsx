@@ -26,7 +26,7 @@ const Navbar: React.FC = () => {
           placeholder="Pesquisar filmes..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="p-2 sm:w-5 md:w-52 rounded-l focus:outline-none focus:ring focus:border-blue-500 flex-grow text-black"
+          className="p-2 w-32 md:w-60 rounded-l focus:outline-none focus:ring focus:border-blue-500 flex-grow text-black"
         />
         <button
           type="submit"
