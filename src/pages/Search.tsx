@@ -4,6 +4,7 @@ import { getSearchMovies } from "../config/api";
 import { useLocation } from "react-router-dom";
 
 interface Movie {
+  id: number;
   title: string;
   overview: string;
   poster_path: string;
@@ -13,6 +14,7 @@ const Search = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
+  const [noMorePages, setNoMorePages] = useState(false);
 
   const location = useLocation();
   const searchQuery = new URLSearchParams(location.search).get("query");
@@ -26,12 +28,16 @@ const Search = () => {
     try {
       if (searchQuery) {
         const data = await getSearchMovies(searchQuery, page);
-        if (page === 1) {
-          setMovies(data.results);
-          setPage((prevPage) => prevPage + 1);
+        if (data.results.length === 0) {
+          setNoMorePages(true);
         } else {
-          setMovies((prevMovies) => [...prevMovies, ...data.results]);
-          setPage((prevPage) => prevPage + 1);
+          if (page === 1) {
+            setMovies(data.results);
+            setPage((prevPage) => prevPage + 1);
+          } else {
+            setMovies((prevMovies) => [...prevMovies, ...data.results]);
+            setPage((prevPage) => prevPage + 1);
+          }
         }
       }
     } catch (error) {
@@ -51,6 +57,7 @@ const Search = () => {
       loading={loading}
       fetchApi={fetchNextMovies}
       page={page}
+      noMorePages={noMorePages}
     />
   );
 };

@@ -21,13 +21,16 @@
     "react-dom": "^18.2.0",
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.18.0",
-    "react-virtualized": "^9.22.3"
+    "react-virtualized": "^9.22.5",
+    "react-window": "^1.8.9"
   },
   "devDependencies": {
     "@types/node": "^20.8.10",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@types/react-modal": "^3.16.2",
+    "@types/react-virtualized": "^9.21.26",
+    "@types/react-window": "^1.8.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react-swc": "^3.3.2",

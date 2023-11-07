@@ -94,8 +94,8 @@ export function CardMovie({ image, title, description, id }: CardMovieProps) {
               </header>
 
               {isLoading ? (
-                <div className="text-center h-72 w-full rounded-lg flex items-center justify-center">
-                  <p>Carregando...</p>
+                <div className="text-center h-[70vh] w-full rounded-lg flex items-center justify-center">
+                  <p className="text-lg font-bold">Carregando...</p>
                 </div>
               ) : (
                 <>

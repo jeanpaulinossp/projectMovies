@@ -1,7 +1,8 @@
 import { MantineProvider } from "@mantine/core";
 import { CardMovie } from "../Card/CardMovie";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import noImage from "../../assets/noimagem.png";
+import { FixedSizeList } from "react-window";
 
 interface RenderCardsProps {
   movies: Array<{
@@ -13,6 +14,7 @@ interface RenderCardsProps {
   loading: boolean;
   fetchApi: () => void;
   page: number;
+  noMorePages: boolean;
 }
 
 const RenderCards: React.FC<RenderCardsProps> = ({
@@ -20,7 +22,9 @@ const RenderCards: React.FC<RenderCardsProps> = ({
   loading,
   fetchApi,
   page,
+  noMorePages,
 }) => {
+  const [listHeight, setListHeight] = useState(400);
   const scrollTimeout = useRef<NodeJS.Timeout | number | undefined>();
 
   const handleScroll = useCallback(() => {
@@ -37,17 +41,28 @@ const RenderCards: React.FC<RenderCardsProps> = ({
   }, [scrollTimeout, fetchApi]);
 
   useEffect(() => {
-    if (page > 1) {
+    if (page > 1 && !noMorePages) {
       window.addEventListener("scroll", handleScroll);
       return () => {
         window.removeEventListener("scroll", handleScroll);
       };
     }
-  }, [page, handleScroll]);
+  }, [page, handleScroll, noMorePages]);
+
+  const calculateListHeight = (movies: any[]) => {
+    const visibleRowCount = Math.min(movies.length, 20);
+    const rowHeight = 100;
+    const calculatedHeight = visibleRowCount * rowHeight;
+    return calculatedHeight;
+  };
+
+  useEffect(() => {
+    setListHeight(calculateListHeight(movies));
+  }, [movies]);
 
   return (
     <>
-      <div className="flex flex-wrap justify-center gap-5 mt-4">
+      <div className="flex flex-wrap justify-center gap-5 mt-4 px-0 mx-auto">
         <MantineProvider>
           {movies &&
             movies.map((item, index) => (
@@ -65,7 +80,18 @@ const RenderCards: React.FC<RenderCardsProps> = ({
             ))}
         </MantineProvider>
       </div>
-      {loading && (
+      {noMorePages ? (
+        <span
+          style={{
+            fontSize: "1.5rem",
+            color: "white",
+            textAlign: "center",
+            marginTop: "1rem",
+          }}
+        >
+          Não há mais páginas para carregar.
+        </span>
+      ) : loading ? (
         <span
           style={{
             fontSize: "2rem",
@@ -76,7 +102,7 @@ const RenderCards: React.FC<RenderCardsProps> = ({
         >
           Carregando...
         </span>
-      )}
+      ) : null}
       <div style={{ height: "100px" }}></div>
     </>
   );
